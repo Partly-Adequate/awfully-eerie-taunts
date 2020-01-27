@@ -1,9 +1,29 @@
+local function OpenMenu()
+	TAUNT.menu = vgui.Create("taunt_tauntscreen_dark")
+end
+
+local function CloseMenu()
+	TAUNT.menu:Close()
+end
+
 function TAUNT.ToggleVisibility()
 	if IsValid(TAUNT.menu) then
-		TAUNT.menu:Close()
+		CloseMenu()
 	else
-    	TAUNT.menu = vgui.Create("taunt_tauntscreen_dark")
+    	OpenMenu()
 	end
+end
+
+function TAUNT.OpenMenu()
+	if IsValid(TAUNT.menu) then return false end
+	OpenMenu()
+	return true
+end
+
+function TAUNT.CloseMenu()
+	if not IsValid(TAUNT.menu) then return false end
+	CloseMenu()
+	return true
 end
 
 function TAUNT.Taunt(taunt)
