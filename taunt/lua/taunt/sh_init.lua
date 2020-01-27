@@ -1,0 +1,2 @@
+TAUNT = {}
+TAUNT.taunts = {}
