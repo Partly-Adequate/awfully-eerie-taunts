@@ -1,6 +1,7 @@
 local CATEGORY_NAME = "TAUNT"
 
 local function RefreshTaunts(calling_ply)
+    TAUNT.LoadTaunts()
 	TAUNT.SendTaunts()
     ulx.fancyLogAdmin(calling_ply, "#refreshed the taunts!")
 end

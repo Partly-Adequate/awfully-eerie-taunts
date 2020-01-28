@@ -1,7 +1,21 @@
 function TAUNT.Taunt(ply, taunt_id)
     local taunt = TAUNT.taunts[taunt_id]
-    PrintMessage(HUD_PRINTTALK, taunt.name)
+    if not taunt.CanTaunt(ply) then return end
+    taunt.Taunt()
     TAUNT.current_taunts_end_at[ply:SteamID()] = CurTime() + taunt.duration
+end
+
+function TAUNT.LoadTaunts()
+    table.Empty(TAUNT.taunts)
+    hook.Run("TAUNT_RegisterTaunts")
+end
+
+function TAUNT.RegisterTaunt(taunt)
+    local id = #TAUNT.taunts + 1
+    taunt.duration = taunt.duration or 0
+    taunt.CanTaunt = taunt.CanTaunt or function(ply) return true end
+    taunt.id = id
+    TAUNT.taunts[id] = taunt
 end
 
 function TAUNT.SendTaunts(ply)
