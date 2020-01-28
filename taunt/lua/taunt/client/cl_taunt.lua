@@ -45,13 +45,11 @@ function TAUNT.IsFavorite(taunt)
 end
 
 function TAUNT.AddToFavorites(taunt)
-	if not IsValid(taunt) or TAUNT.IsFavorite(taunt) then return end
 	sql.Query( "INSERT OR REPLACE INTO taunt_taunts VALUES( " .. sql.SQLStr(taunt.name) .. ", " .. 1 .. ")")
 	TAUNT.extension_handler.OnTauntAddedToFavorites(taunt)
 end
 
 function TAUNT.RemoveFromFavorites(taunt)
-	if not IsValid(taunt) or not TAUNT.IsFavorite(taunt) then return end
 	sql.Query( "INSERT OR REPLACE INTO taunt_taunts VALUES( " .. sql.SQLStr(taunt.name) .. ", " .. 0 .. ")")
 	TAUNT.extension_handler.OnTauntRemovedFromFavorites(taunt)
 end

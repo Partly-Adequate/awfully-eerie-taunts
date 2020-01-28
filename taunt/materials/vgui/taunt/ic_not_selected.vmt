@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
- "$basetexture" "vgui/pam/ic_not_selected"
+ "$basetexture" "vgui/pam/ic_not_voted"
  "$vertexcolor" 1
  "$vertexalpha" 1
  "$translucent" 1
