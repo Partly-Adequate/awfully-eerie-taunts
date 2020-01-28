@@ -1,1 +1,3 @@
-include("taunt/server/sv_taunt_example.lua")
+if SERVER then
+    include("taunt/server/sv_taunt_example.lua")
+end
