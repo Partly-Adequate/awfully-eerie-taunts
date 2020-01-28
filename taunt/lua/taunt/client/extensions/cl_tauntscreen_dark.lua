@@ -10,6 +10,7 @@ local col_base = {r = 40, g = 40, b = 40, a = 255}
 local col_base_darker = {r = 30, g = 30, b = 30, a = 255}
 local col_base_darkest = {r = 20, g = 20, b = 20, a = 255}
 local col_text = {r = 150, g = 150, b = 150, a = 255}
+local col_text_error = {r = 250, g = 50, b = 50, a = 255}
 
 -- images and icons
 local ic_favorite = Material("vgui/taunt/ic_favorite")
@@ -48,6 +49,8 @@ function PANEL:Init()
 	self.search_term = ""
 	self.show_favorites = false
 	self.taunt_buttons = {}
+	self.current_taunt_ends_at = 0
+	self.lbl_error = nil
 
 	local container = vgui.Create("DPanel", self)
 	container:SetSize(width, height - 25)
@@ -55,7 +58,8 @@ function PANEL:Init()
 	container.Paint = function(s, w, h) end
 
 	self:InitSettings(container, 0, 0, width, settings_height * 2)
-	self:InitTauntList(container, 0, settings_height * 2, width, height - 25 - settings_height)
+	self:InitTauntList(container, 0, settings_height * 2, width, height - settings_height * 3)
+	self:InitError(container, 0, height - settings_height * 2, width, settings_height)
 
 	self:MakePopup()
 	self:SetKeyboardInputEnabled(false)
@@ -89,7 +93,7 @@ function PANEL:InitCountDown(parent, pos_x, pos_y, width, height)
 		surface.DrawRect(2, 2, w - 4, h - 4)
 	end
 	lbl_countdown.Think = function()
-		local time_left = math.Round(math.max(TAUNT.current_taunt_ends_at - CurTime(), 0))
+		local time_left = math.Round(math.max(self.current_taunt_ends_at - CurTime(), 0))
 		if time_left > 0 then
 			local minutes = math.floor(time_left / 60)
 			local seconds = time_left % 60
@@ -238,6 +242,23 @@ function PANEL:InitTauntList(parent, pos_x, pos_y, width, height)
 	self:RefreshTauntList()
 end
 
+function PANEL:InitError(parent, pos_x, pos_y, width, height)
+	local lbl_error = vgui.Create("DLabel", parent)
+	lbl_error:SetSize(width, height)
+	lbl_error:SetPos(pos_x, pos_y)
+	lbl_error:SetTextColor(col_text_error)
+	lbl_error:SetFont("TAUNT_SettingsFont")
+	lbl_error:SetText("")
+	lbl_error:SetContentAlignment(5)
+	lbl_error.Paint = function(s, w, h)
+		surface.SetDrawColor(col_base_darkest)
+		surface.DrawRect(0, 0, w, h)
+		surface.SetDrawColor(col_base)
+		surface.DrawRect(2, 2, w - 4, h - 4)
+	end
+	self.lbl_error = lbl_error
+end
+
 function PANEL:FitsSearchTerm(button)
 	local search_term = self.search_term
 
@@ -265,7 +286,7 @@ end
 function PANEL:RefreshTauntList()
 	self.taunt_list:Clear()
 	for _, taunt_button in pairs(self.taunt_buttons) do
-		if self:FitsSearchTerm(taunt_button) and (not self.show_favorites or TAUNT.IsFavorite(taunt_button.taunt.name)) then
+		if self:FitsSearchTerm(taunt_button) and (not self.show_favorites or TAUNT.IsFavorite(taunt_button.taunt)) then
 			self.taunt_list:AddItem(taunt_button)
 			taunt_button:SetVisible(true)
 		else
@@ -311,7 +332,7 @@ function PANEL:InitTauntButtons(taunt_button_width)
 
 		-- heart for favorites
 		local ibtn_favorite = vgui.Create("DImageButton", taunt_button)
-		if TAUNT.IsFavorite(tauntinfo.name) then
+		if TAUNT.IsFavorite(tauntinfo) then
 			ibtn_favorite:SetMaterial(ic_favorite)
 		else
 			ibtn_favorite:SetMaterial(ic_not_favorite)
@@ -319,11 +340,11 @@ function PANEL:InitTauntButtons(taunt_button_width)
 		ibtn_favorite:SetPos(taunt_button_name_width + taunt_button_duration_width, 0)
 		ibtn_favorite:SetSize(taunt_button_height, taunt_button_height)
 		ibtn_favorite.DoClick = function()
-			if TAUNT.IsFavorite(taunt_button.taunt.name) then
-				TAUNT.RemoveFromFavorites(taunt_button.taunt.name)
+			if TAUNT.IsFavorite(taunt_button.taunt) then
+				TAUNT.RemoveFromFavorites(taunt_button.taunt)
 				ibtn_favorite:SetMaterial(ic_not_favorite)
 			else
-				TAUNT.AddToFavorites(taunt_button.taunt.name)
+				TAUNT.AddToFavorites(taunt_button.taunt)
 				ibtn_favorite:SetMaterial(ic_favorite)
 			end
 			self:RefreshTauntList()
@@ -340,6 +361,15 @@ function PANEL:InitTauntButtons(taunt_button_width)
 
 		table.insert(self.taunt_buttons, taunt_button)
 	end
+end
+
+function PANEL:OnSuccess(taunt)
+	self.current_taunt_ends_at = CurTime() + taunt.duration
+	self.lbl_error:SetText("")
+end
+
+function PANEL:DisplayError(error)
+	self.lbl_error:SetText(error)
 end
 
 derma.DefineControl("taunt_tauntscreen_dark", "", PANEL, "DFrame")

@@ -14,3 +14,9 @@ net.Receive("TAUNT_Send_Taunts", function()
 		TAUNT.OpenMenu()
 	end
 end)
+
+net.Receive("TAUNT_Feedback", function()
+	local feedback_type = net.ReadUInt(32)
+	local taunt_id = net.ReadUInt(32)
+	TAUNT.InterpretFeedback(feedback_type, taunt_id)
+end)
