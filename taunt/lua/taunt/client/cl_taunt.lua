@@ -38,10 +38,9 @@ function TAUNT.IsFavorite(taunt)
 		else
 			return false;
 		end
-	else
-		--insert new taunt into database
-		sql.Query( "INSERT OR REPLACE INTO taunt_taunts VALUES( " .. sql.SQLStr(taunt.name) .. ", " .. 0 .. ")")
 	end
+	--insert new taunt into database
+	sql.Query( "INSERT OR REPLACE INTO taunt_taunts VALUES( " .. sql.SQLStr(taunt.name) .. ", " .. 0 .. ")")
 	return false;
 end
 

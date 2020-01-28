@@ -194,10 +194,10 @@ end
 
 function PANEL:InitFavorites(parent, pos_x, pos_y, width, height)
 	local btn_toggle_favorites = vgui.Create("DButton", parent)
-	btn_toggle_favorites:SetText("")
 	btn_toggle_favorites:SetSize(width, height)
 	btn_toggle_favorites:SetPos(pos_x, pos_y)
 	btn_toggle_favorites:SetTextColor(col_text)
+	btn_toggle_favorites:SetText("")
 	btn_toggle_favorites.Paint = function(s, w, h)
 		surface.SetDrawColor(col_base_darkest)
 		surface.DrawRect(0, 0, w, h)
