@@ -1,7 +1,7 @@
 local PANEL = {}
 
 -- alignment helping values
-local taunt_button_height = 25
+local taunt_button_height = 20
 local scroll_bar_size = 14
 local settings_height = 25
 
@@ -15,12 +15,7 @@ local col_text = {r = 150, g = 150, b = 150, a = 255}
 local ic_favorite = Material("vgui/taunt/ic_favorite")
 local ic_not_favorite = Material("vgui/taunt/ic_not_favorite")
 
-surface.CreateFont("TAUNT_NameFont", {
-	font = "Trebuchet MS",
-	size = taunt_button_height * 0.75
-})
-
-surface.CreateFont("TAUNT_DurationFont", {
+surface.CreateFont("TAUNT_ButtonFont", {
 	font = "Trebuchet MS",
 	size = taunt_button_height * 0.75
 })
@@ -300,7 +295,7 @@ function PANEL:InitTauntButtons(taunt_button_width)
 		lbl_name:SetContentAlignment(4)
 		lbl_name:SetText(tauntinfo.name)
 		lbl_name:SetTextColor(col_text)
-		lbl_name:SetFont("TAUNT_NameFont")
+		lbl_name:SetFont("TAUNT_ButtonFont")
 
 		-- duration label
 		local lbl_duration = vgui.Create("DLabel", taunt_button)
@@ -308,7 +303,7 @@ function PANEL:InitTauntButtons(taunt_button_width)
 		lbl_duration:SetSize(taunt_button_duration_width, taunt_button_height)
 		lbl_duration:SetContentAlignment(5)
 		lbl_duration:SetTextColor(col_text)
-		lbl_duration:SetFont("TAUNT_DurationFont")
+		lbl_duration:SetFont("TAUNT_ButtonFont")
 		
         local minutes = math.floor(tauntinfo.duration / 60)
         local seconds = tauntinfo.duration % 60
