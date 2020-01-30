@@ -93,7 +93,7 @@ function PANEL:InitCountDown(parent, pos_x, pos_y, width, height)
 		surface.DrawRect(2, 2, w - 4, h - 4)
 	end
 	lbl_countdown.Think = function()
-		local time_left = math.Round(math.max(self.current_taunt_ends_at - CurTime(), 0))
+		local time_left = math.Round(math.max(TAUNT.current_taunt_ends_at - CurTime(), 0))
 		if time_left > 0 then
 			local minutes = math.floor(time_left / 60)
 			local seconds = time_left % 60

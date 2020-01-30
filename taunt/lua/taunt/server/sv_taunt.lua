@@ -27,7 +27,7 @@ function TAUNT.Taunt(ply, taunt_id)
         return
     end
 
-    taunt.Taunt()
+    taunt.Taunt(ply)
     TAUNT.current_taunts_end_at[ply:SteamID()] = CurTime() + taunt.duration
     net.Start("TAUNT_Feedback")
     net.WriteUInt(TAUNT.SUCCESS, 32)
@@ -37,6 +37,7 @@ end
 
 function TAUNT.LoadTaunts()
     table.Empty(TAUNT.taunts)
+    print("[TAUNT] Registering taunts!")
     hook.Run("TAUNT_RegisterTaunts")
 end
 

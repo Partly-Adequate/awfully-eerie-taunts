@@ -69,6 +69,8 @@ function TAUNT.InterpretFeedback(feedback_type, taunt_id)
 		return
 	end
 	if feedback_type == TAUNT.SUCCESS then
+		TAUNT.current_taunt = taunt
+		TAUNT.current_taunt_ends_at = CurTime() + taunt.duration
 		TAUNT.extension_handler.OnSuccess(taunt)
 		return
 	end

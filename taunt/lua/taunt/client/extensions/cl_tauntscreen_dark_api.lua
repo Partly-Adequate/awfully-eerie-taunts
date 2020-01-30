@@ -31,10 +31,6 @@ function extension.OnDisable()
     extension.OnMenuClosed()
 end
 
-function extension.OnSuccess(taunt)
-    panel:OnSuccess(taunt)
-end
-
 function extension.OnErrorInvalidPerms(taunt)
     panel:DisplayError("Error: You can't use " .. taunt.name .. " momentarily!")
 
