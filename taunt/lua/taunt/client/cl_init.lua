@@ -12,6 +12,6 @@ if not sql.TableExists("taunt_extensions") then
 	sql.Query("CREATE TABLE taunt_extensions(id TEXT NOT NULL PRIMARY KEY, is_enabled INTEGER NOT NULL)")
 end 
 
-hook.Add("Initialize", "PAM_GuiManager", function()
+hook.Add("Initialize", "TAUNT_GuiManager", function()
 	TAUNT.ReloadExtensions()
 end)
