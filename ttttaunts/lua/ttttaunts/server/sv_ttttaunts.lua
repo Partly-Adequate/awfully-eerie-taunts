@@ -22,6 +22,8 @@ end
 
 --registers all taunts
 local function RegisterTaunts()
+    if GAMEMODE_NAME != "terrortown" then return end
+    
     print("Registering ttttaunts!")
     for _,taunt_file in ipairs(taunt_files) do
         --create taunt structure
@@ -30,7 +32,7 @@ local function RegisterTaunts()
             duration = SoundDuration(path .. taunt_file)
         }
         taunt.CanTaunt = function(ply)
-            return ply:Alive()
+            return ply:IsTerror()
         end
         taunt.Taunt = function(ply)
             ply:EmitSound(taunt.name)
