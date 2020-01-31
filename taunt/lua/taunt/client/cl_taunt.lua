@@ -1,3 +1,15 @@
+function TAUNT.Taunt(taunt)
+	net.Start("TAUNT_Taunt")
+	net.WriteUInt(taunt.id, 32)
+	net.SendToServer()
+	TAUNT.extension_handler.OnTauntAttempted()
+end
+
+function TAUNT.Stop()
+	TAUNT.current_taunt_ends_at = 0
+	TAUNT.current_taunt = nil
+end
+
 function TAUNT.ToggleVisibility()
 	if TAUNT.is_menu_open then
 		TAUNT.extension_handler.OnMenuClosed()
@@ -20,13 +32,6 @@ function TAUNT.CloseMenu()
 		TAUNT.extension_handler.OnMenuClosed()
 		TAUNT.is_menu_open = false
 	end
-end
-
-function TAUNT.Taunt(taunt)
-	net.Start("TAUNT_Taunt")
-	net.WriteUInt(taunt.id, 32)
-	net.SendToServer()
-	TAUNT.extension_handler.OnTauntAttempted()
 end
 
 function TAUNT.IsFavorite(taunt)

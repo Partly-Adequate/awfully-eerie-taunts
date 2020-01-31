@@ -20,3 +20,7 @@ net.Receive("TAUNT_Feedback", function()
 	local taunt_id = net.ReadUInt(32)
 	TAUNT.InterpretFeedback(feedback_type, taunt_id)
 end)
+
+net.Receive("TAUNT_Stop", function()
+	TAUNT.Stop()
+end)

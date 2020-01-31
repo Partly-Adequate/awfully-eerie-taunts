@@ -29,10 +29,26 @@ function TAUNT.Taunt(ply, taunt_id)
 
     taunt.Taunt(ply)
     TAUNT.current_taunts_end_at[ply:SteamID()] = CurTime() + taunt.duration
+    TAUNT.current_taunts[ply:SteamID()] = taunt
     net.Start("TAUNT_Feedback")
     net.WriteUInt(TAUNT.SUCCESS, 32)
     net.WriteUInt(taunt_id, 32)
     net.Send(ply)
+end
+
+function TAUNT.StopTaunt(ply)
+    if not IsValid(ply) then return end
+    
+    local current_taunt_ends_at = TAUNT.current_taunts_end_at[ply:SteamID()] or 0
+    if current_taunt_ends_at < CurTime() then return end
+
+    local current_taunt = TAUNT.current_taunts[ply:SteamID()]
+    current_taunt.StopTaunt(ply)
+    TAUNT.current_taunts_end_at[ply:SteamID()] = 0
+    TAUNT.current_taunts[ply:SteamID()] = nil
+    net.Start("TAUNT_Stop")
+    net.Send(ply)
+    return
 end
 
 function TAUNT.LoadTaunts()
@@ -45,6 +61,7 @@ function TAUNT.RegisterTaunt(taunt)
     local id = #TAUNT.taunts + 1
     taunt.duration = taunt.duration or 0
     taunt.CanTaunt = taunt.CanTaunt or function(ply) return true end
+    taunt.StopTaunt = taunt.StopTaunt or function(ply) end
     taunt.id = id
     TAUNT.taunts[id] = taunt
     print("[TAUNT] Registered " .. taunt.name .. " with id " .. id .. "!")
